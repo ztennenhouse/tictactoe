@@ -60,27 +60,49 @@ const checkLocation = (player) => {
     }
 };
 
-const checkWin = () => {
-    let p1moves = checkLocation("Player 1");
-    let p2moves = checkLocation("Player 2");
-    for (let i = 0; i < winCombos.length; i++) {
-        const containsAll = winCombos[i].every(element => {
-            return p1moves.includes(element);
-        });
-        if (containsAll === true) {
-            console.log("Player 1 wins!");
+    return {move, checkLocation};})();
+
+    const game = (() => {
+        const checkWin = () => {
+            let p1moves = player.checkLocation("Player 1");
+            let p2moves = player.checkLocation("Player 2");
+            for (let i = 0; i < winCombos.length; i++) {
+                const containsAll = winCombos[i].every(element => {
+                    return p1moves.includes(element);
+                });
+                if (containsAll === true) {
+                    return "Player 1";
+                }
+            }
+            for (let i = 0; i < winCombos.length; i++) {
+                const containsAll = winCombos[i].every(element => {
+                    return p2moves.includes(element);
+                });
+                if (containsAll === true) {
+                    return "Player 2";
+                } else {
+                    return "Tie";
+                }
+            }
+        
+    };
+        const checkTie = () => {
+            if(checkWin() === ("Player 1" || "Player 2")) {
+                return false;
+            } else {
+                return true;
+            }
         }
-    }
-    for (let i = 0; i < winCombos.length; i++) {
-        const containsAll = winCombos[i].every(element => {
-            return p2moves.includes(element);
-        });
-        if (containsAll === true) {
-            console.log("Player 2 wins!");
+        function clear(length) {
+            for (let i = 0; i < length; i++) {
+                temp = document.getElementById(i);
+                if(temp.textContent !== "") {
+                    temp.textContent = "";
+                }    
+            }
         }
-    }
-}
-    return {move, checkLocation,checkWin};})();
+    return {checkWin, checkTie, clear};})();
+    
 
     // var playerMoves = [];
     
@@ -103,7 +125,7 @@ const gameBoard = (() => {
         square.setAttribute('id', i);
         squares.appendChild(square);
         square.addEventListener('click', function(){
-        player.move(togplayer, i);player.checkWin();
+        player.move(togplayer, i);game.checkWin();
 ;    }, false);
 };
 
